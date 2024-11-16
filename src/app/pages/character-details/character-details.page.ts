@@ -16,7 +16,7 @@ export class CharacterDetailsPage implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     // Mock data for now
     this.character = {
-      id: Number(id),
+      id: id!,
       name: `Character ${id}`,
       description: `Description for character ${id}`,
       image: `https://picsum.photos/id/${id}/200/200`

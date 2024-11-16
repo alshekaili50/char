@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Auth, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
@@ -10,8 +10,10 @@ import { Auth,
   signOut,
   User,
   OAuthProvider,
-  authState } from '@angular/fire/auth';
+  authState,
+  onAuthStateChanged } from '@angular/fire/auth';
 import { BehaviorSubject, Observable, map } from 'rxjs';
+import { UserService } from './user.service';
 
 interface CustomUser extends User {
   subscriptionStatus?: string;
@@ -20,14 +22,29 @@ interface CustomUser extends User {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
   private user = new BehaviorSubject<User | null>(null);
   currentUser$ = this.user.asObservable();
   user$: Observable<User | null>;
+  private unsubscribeAuth: any;
 
-  constructor(private auth: Auth) {
+  constructor(
+    private auth: Auth,
+    private userService: UserService
+  ) {
     auth.onAuthStateChanged(user => this.user.next(user));
     this.user$ = authState(this.auth);
+    this.unsubscribeAuth = onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        this.userService.createUserDocument(user);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.unsubscribeAuth) {
+      this.unsubscribeAuth();
+    }
   }
 
   async emailSignIn(email: string, password: string) {
@@ -40,7 +57,9 @@ export class AuthService {
 
   async emailSignUp(email: string, password: string) {
     try {
-      return await createUserWithEmailAndPassword(this.auth, email, password);
+      const credential = await createUserWithEmailAndPassword(this.auth, email, password);
+      await this.userService.createUserDocument(credential.user);
+      return credential;
     } catch (error) {
       throw error;
     }
@@ -48,7 +67,9 @@ export class AuthService {
 
   async googleSignIn() {
     try {
-      return await signInWithPopup(this.auth, new GoogleAuthProvider());
+      const credential = await signInWithPopup(this.auth, new GoogleAuthProvider());
+      await this.userService.createUserDocument(credential.user);
+      return credential;
     } catch (error) {
       throw error;
     }
@@ -56,15 +77,20 @@ export class AuthService {
 
   async facebookSignIn() {
     try {
-      return await signInWithPopup(this.auth, new FacebookAuthProvider());
+      const credential = await signInWithPopup(this.auth, new FacebookAuthProvider());
+      await this.userService.createUserDocument(credential.user);
+      return credential;
     } catch (error) {
       throw error;
     }
   }
+
   async appleSignIn() {
     try {
       const provider = new OAuthProvider('apple.com');
-      return await signInWithPopup(this.auth, provider);
+      const credential = await signInWithPopup(this.auth, provider);
+      await this.userService.createUserDocument(credential.user);
+      return credential;
     } catch (error) {
       throw error;
     }

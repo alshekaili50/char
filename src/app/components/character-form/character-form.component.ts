@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Character } from '../../models/character.interface';
+import { CharacterService } from '../../services/character.service';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-character-form',
@@ -18,24 +20,39 @@ import { Character } from '../../models/character.interface';
 export class CharacterFormComponent {
   @Output() formSubmit = new EventEmitter<Partial<Character>>();
   @Output() formCancel = new EventEmitter<void>();
+  @Input() isModal = false;
   
   characterForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private characterService: CharacterService,
+    private modalCtrl: ModalController
+  ) {
     this.characterForm = this.fb.group({
+      age: ['', Validators.required],
       name: ['', Validators.required],
-      description: ['', Validators.required],
-      image: ['']
+      photoURL: [''],
+      relation: ['', Validators.required]
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.characterForm.valid) {
-      this.formSubmit.emit(this.characterForm.value);
+      try {
+        await this.characterService.addCharacter(this.characterForm.value);
+        if (this.isModal) {
+          this.modalCtrl.dismiss(true);
+        }
+      } catch (error) {
+        console.error('Error saving character:', error);
+      }
     }
   }
 
   onCancel() {
-    this.formCancel.emit();
+    if (this.isModal) {
+      this.modalCtrl.dismiss();
+    }
   }
 }

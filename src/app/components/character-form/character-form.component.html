@@ -1,27 +1,24 @@
 <form [formGroup]="characterForm" (ngSubmit)="onSubmit()">
-  <ion-list>
-    <ion-item>
-      <ion-label position="stacked">Name</ion-label>
-      <ion-input formControlName="name" placeholder="Enter character name"></ion-input>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">Name</ion-label>
+    <ion-input formControlName="name" type="text"></ion-input>
+  </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Description</ion-label>
-      <ion-textarea formControlName="description" placeholder="Enter character description"></ion-textarea>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">Age</ion-label>
+    <ion-input formControlName="age" type="number"></ion-input>
+  </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Image URL</ion-label>
-      <ion-input formControlName="image" placeholder="Enter image URL"></ion-input>
-    </ion-item>
-  </ion-list>
+  <ion-item>
+    <ion-label position="floating">Relation</ion-label>
+    <ion-input formControlName="relation" type="text"></ion-input>
+  </ion-item>
 
-  <ion-row class="ion-padding">
-    <ion-col>
-      <ion-button expand="block" (click)="onCancel()">Cancel</ion-button>
-    </ion-col>
-    <ion-col>
-      <ion-button expand="block" type="submit" [disabled]="!characterForm.valid">Save</ion-button>
-    </ion-col>
-  </ion-row>
+  <ion-item>
+    <ion-label position="floating">Photo URL</ion-label>
+    <ion-input formControlName="photoURL" type="text"></ion-input>
+  </ion-item>
+
+  <ion-button type="submit" expand="block" [disabled]="!characterForm.valid">Submit</ion-button>
+  <ion-button type="button" expand="block" fill="clear" (click)="onCancel()">Cancel</ion-button>
 </form>
