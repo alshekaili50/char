@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <h2 class="ion-text-center">Welcome Back</h2>
+    
+    <!-- Email Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="emailLogin()">
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">
+        Email is required
+      </div>
+      <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">
+        Please enter a valid email
+      </div>
+
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
+        Password is required
+      </div>
+
+      <ion-button expand="block" type="submit" [disabled]="!loginForm.valid || isLoading">
+        Login with Email
+      </ion-button>
+    </form>
+
+    <div class="divider">
+      <span>or continue with</span>
+    </div>
+
+    <!-- Social Login Buttons -->
+    <div class="social-buttons">
+      <ion-button expand="block" color="danger" (click)="socialLogin('google')" [disabled]="isLoading">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        Google
+      </ion-button>
+
+      <ion-button expand="block" color="primary" (click)="socialLogin('facebook')" [disabled]="isLoading">
+        <ion-icon slot="start" name="logo-facebook"></ion-icon>
+        Facebook
+      </ion-button>
+
+      <ion-button expand="block" color="secondary" (click)="socialLogin('twitter')" [disabled]="isLoading">
+        <ion-icon slot="start" name="logo-twitter"></ion-icon>
+        Twitter
+      </ion-button>
+
+      <ion-button expand="block" color="dark" (click)="socialLogin('github')" [disabled]="isLoading">
+        <ion-icon slot="start" name="logo-github"></ion-icon>
+        GitHub
+      </ion-button>
+
+      <ion-button expand="block" fill="outline" (click)="socialLogin('apple')" [disabled]="isLoading">
+        <ion-icon slot="start" name="logo-apple"></ion-icon>
+        Sign in with Apple
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
