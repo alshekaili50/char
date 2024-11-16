@@ -1,0 +1,7 @@
+{
+  "name": "virtual",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
