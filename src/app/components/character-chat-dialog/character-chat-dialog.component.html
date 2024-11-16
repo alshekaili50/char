@@ -1,27 +1,94 @@
-<ion-card>
-  <ion-card-header>
-    <ion-card-title>Chat with {{ character.name }}</ion-card-title>
-  </ion-card-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="character-info">
+        <ion-avatar>
+          <img [src]="character.avatarUrl" [alt]="character.name">
+        </ion-avatar>
+        <span>{{ character.name }}</span>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <ion-card-content>
-    <div class="chat-container">
-      <div class="messages">
-        <ion-item *ngFor="let message of messages" [ngClass]="message.sender">
-          <ion-label class="ion-text-wrap">
-            <p>{{ message.text }}</p>
-            <small>{{ message.timestamp | date:'short' }}</small>
-          </ion-label>
-        </ion-item>
+<ion-content>
+  <div class="chat-container">
+    <!-- Loading spinner -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <ion-spinner></ion-spinner>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" #chatContent>
+      <div *ngFor="let message of messages" 
+           [ngClass]="['message', message.sender === 'user' ? 'user' : 'character']">
+        <div [ngSwitch]="message.type">
+          <!-- Text message -->
+          <div *ngSwitchCase="'text'" class="message-bubble">
+            {{ message.content }}
+          </div>
+
+          <!-- Image message -->
+          <div *ngSwitchCase="'image'" class="message-bubble">
+            <img [src]="message.content" 
+                 class="message-image"
+                 (click)="openImage(message)"
+                 loading="lazy"
+                 alt="Shared image">
+          </div>
+
+          <!-- File message -->
+          <div *ngSwitchCase="'file'" class="message-bubble">
+            <div class="message-file" (click)="openFile(message)">
+              <ion-icon name="document"></ion-icon>
+              <span>{{ message.fileMetadata?.fileName }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="message-time">
+          {{ message.timestamp?.toDate() | date:'short' }}
+        </div>
       </div>
 
-      <div class="input-container">
-        <ion-item>
-          <ion-input [(ngModel)]="newMessage" placeholder="Type your message..." (keyup.enter)="sendMessage()"></ion-input>
-          <ion-button slot="end" (click)="sendMessage()" [disabled]="!newMessage.trim()">
-            <ion-icon name="send"></ion-icon>
-          </ion-button>
-        </ion-item>
+      <!-- Typing indicator -->
+      <div *ngIf="isTyping" class="message character">
+        <div class="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </div>
-  </ion-card-content>
-</ion-card>
+
+    <!-- Input area -->
+    <div class="chat-input">
+      <ion-item lines="none">
+        <ion-input
+          #messageInput
+          placeholder="Type a message..."
+          [(ngModel)]="newMessage"
+          (keyup.enter)="sendMessage()"
+        ></ion-input>
+        <div class="input-actions">
+          <ion-button fill="clear" (click)="fileInput.click()">
+            <ion-icon name="attach"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+            <ion-icon name="send"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+      <input
+        #fileInput
+        type="file"
+        (change)="handleFileUpload($event)"
+        hidden
+      >
+    </div>
+  </div>
+</ion-content>

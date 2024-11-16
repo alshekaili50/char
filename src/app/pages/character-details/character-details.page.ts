@@ -19,7 +19,8 @@ export class CharacterDetailsPage implements OnInit {
       id: id!,
       name: `Character ${id}`,
       description: `Description for character ${id}`,
-      image: `https://picsum.photos/id/${id}/200/200`
+      image: `https://picsum.photos/id/${id}/200/200`,
+      avatarUrl: `https://picsum.photos/id/${id}/100/100`
     };
   }
 }

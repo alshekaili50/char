@@ -1,6 +1,7 @@
 export interface Character {
-  id?: string;
+  id: string;
   name: string;
+  avatarUrl?: string;
   description: string;
   image?: string;
   createdAt?: Date;
