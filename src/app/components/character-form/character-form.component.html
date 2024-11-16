@@ -1,0 +1,27 @@
+<form [formGroup]="characterForm" (ngSubmit)="onSubmit()">
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Name</ion-label>
+      <ion-input formControlName="name" placeholder="Enter character name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Description</ion-label>
+      <ion-textarea formControlName="description" placeholder="Enter character description"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Image URL</ion-label>
+      <ion-input formControlName="image" placeholder="Enter image URL"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-row class="ion-padding">
+    <ion-col>
+      <ion-button expand="block" (click)="onCancel()">Cancel</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button expand="block" type="submit" [disabled]="!characterForm.valid">Save</ion-button>
+    </ion-col>
+  </ion-row>
+</form>
