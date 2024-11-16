@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ character?.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <!-- Character Info Card -->
+      <ion-col size="12" size-md="4">
+        <ion-card *ngIf="character">
+          <ion-img *ngIf="character.image" [src]="character.image"></ion-img>
+          <ion-card-header>
+            <ion-card-title>{{ character.name }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>{{ character.description }}</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <!-- Chat Dialog Card -->
+      <ion-col size="12" size-md="8">
+        <app-character-chat-dialog *ngIf="character" [character]="character"></app-character-chat-dialog>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

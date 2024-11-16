@@ -1,0 +1,11 @@
+<ion-list>
+  <ion-item *ngFor="let character of characters" (click)="onSelect(character)" button>
+    <ion-avatar slot="start" *ngIf="character.image">
+      <img [src]="character.image" alt="{{ character.name }}">
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ character.name }}</h2>
+      <p>{{ character.description }}</p>
+    </ion-label>
+  </ion-item>
+</ion-list>

@@ -1,0 +1,27 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Chat with {{ character.name }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <div class="chat-container">
+      <div class="messages">
+        <ion-item *ngFor="let message of messages" [ngClass]="message.sender">
+          <ion-label class="ion-text-wrap">
+            <p>{{ message.text }}</p>
+            <small>{{ message.timestamp | date:'short' }}</small>
+          </ion-label>
+        </ion-item>
+      </div>
+
+      <div class="input-container">
+        <ion-item>
+          <ion-input [(ngModel)]="newMessage" placeholder="Type your message..." (keyup.enter)="sendMessage()"></ion-input>
+          <ion-button slot="end" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+            <ion-icon name="send"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>

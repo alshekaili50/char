@@ -1,0 +1,26 @@
+.chat-container {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.user {
+  --background: var(--ion-color-light);
+  margin-left: 20px;
+}
+
+.character {
+  --background: var(--ion-color-primary-tint);
+  margin-right: 20px;
+}
+
+.input-container {
+  border-top: 1px solid var(--ion-color-light);
+  padding-top: 10px;
+}

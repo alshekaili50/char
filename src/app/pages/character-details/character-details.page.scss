@@ -1,0 +1,22 @@
+ion-content {
+  --background: var(--ion-color-light);
+}
+
+ion-card {
+  margin: 0;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  ion-grid {
+    height: 100%;
+  }
+
+  ion-row {
+    height: 100%;
+  }
+
+  ion-col {
+    height: 100%;
+  }
+}
