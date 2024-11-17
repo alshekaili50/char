@@ -30,10 +30,9 @@ export class CharacterFormComponent {
     private modalCtrl: ModalController
   ) {
     this.characterForm = this.fb.group({
-      age: ['', Validators.required],
       name: ['', Validators.required],
       photoURL: [''],
-      relation: ['', Validators.required]
+      relation: ['casual', Validators.required]
     });
   }
 

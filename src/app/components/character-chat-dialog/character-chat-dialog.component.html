@@ -69,10 +69,11 @@
     <div class="chat-input">
       <ion-item lines="none">
         <ion-input
-          #messageInput
-          placeholder="Type a message..."
           [(ngModel)]="newMessage"
-          (keyup.enter)="sendMessage()"
+          placeholder="Type a message..."
+          (click)="onTextBoxClick($event)"
+          readonly
+          #messageInput
         ></ion-input>
         <div class="input-actions">
           <ion-button fill="clear" (click)="fileInput.click()">

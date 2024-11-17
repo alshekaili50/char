@@ -1,11 +1,51 @@
-<ion-list>
-  <ion-item *ngFor="let character of characters" (click)="onSelect(character)" button>
-    <ion-avatar slot="start" *ngIf="character.image">
-      <img [src]="character.image" alt="{{ character.name }}">
-    </ion-avatar>
-    <ion-label>
-      <h2>{{ character.name }}</h2>
-      <p>{{ character.description }}</p>
-    </ion-label>
-  </ion-item>
-</ion-list>
+<div class="character-list-container">
+  <ion-searchbar
+    placeholder="Search characters..."
+    animated="true"
+    (ionInput)="handleSearch($event)"
+    class="custom-searchbar">
+  </ion-searchbar>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let character of filteredCharacters">
+      <ion-item button (click)="onSelect(character)" detail="false">
+        <ion-avatar slot="start">
+          <img [src]="character.photoURL || 'assets/default-avatar.png'" 
+               [alt]="character.name">
+        </ion-avatar>
+        
+        <ion-label>
+          <h2>{{ character.name }}</h2>
+          <p>
+            <ion-badge [color]="getRelationColor(character.relation ?? 'casual')">
+              <ion-icon [name]="getRelationIcon(character.relation ?? 'casual')"></ion-icon>
+              {{ character.relation ?? 'casual' | titlecase }}
+            </ion-badge>
+          </p>
+        </ion-label>
+
+        <ion-button slot="end" fill="clear" (click)="onSelect(character)">
+          <ion-icon name="chatbubble-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="deleteCharacter(character)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <div class="empty-state" *ngIf="filteredCharacters.length === 0">
+    <ion-icon name="people-outline"></ion-icon>
+    <h3>No Characters Found</h3>
+    <p>Create your first character or try a different search term</p>
+  </div>
+</div>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button (click)="openCharacterForm()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
